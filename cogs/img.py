@@ -36,10 +36,9 @@ class img(commands.Cog):
 
                 
                 og_image = random.choice(images)
-                
                 try:
-                    a,b = og_image.split("/")
-                    if a == "imgs":
+                    a,b,c = og_image.split("/")
+                    if a == "static":
                         is_img = True
                 except:
                     is_img = False
