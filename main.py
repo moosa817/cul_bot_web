@@ -6,11 +6,12 @@
 # before using app.run.
 import config
 from threading import Thread
-from flask import Flask,render_template,request,session,redirect,url_for
+from flask import Flask,render_template,request,session,redirect,url_for,jsonify
 from functools import partial
 from discord.ext import commands
 import discord
 import os
+import sqlite3
 # Initialize our app and the bot itself
 app = Flask(__name__)
 
@@ -77,7 +78,26 @@ def index():
         def login(username, password):
             session["username"] = username
             session["password"] = password
-            return render_template("index.html",login=True,error="")
+            name = []
+            img = []
+            conn = sqlite3.connect("stuff.db")
+            cur = conn.cursor()   
+            cur.execute("SELECT name,img FROM `img_stuff`")
+            conn.commit()
+            result = cur.fetchall()
+            conn.close()
+            for i in range(len(result)):
+                name.append(result[i][0])
+                img.append(result[i][1])
+
+            imgs = []
+            for f in img:
+                imgs.append(f.split(","))
+
+        
+            session["names"] = name
+            session["imgs"] = imgs
+            return render_template("index.html",login=True,name=name,imgs=imgs)
 
 
         if username == "cul" and pwd=="cul":
@@ -88,12 +108,54 @@ def index():
 
 
 
-    if session.get('user'):
-        return render_template("index.html",login=True)
+    if session.get('username'):
+        name = []
+        img = []
+        conn = sqlite3.connect("stuff.db")
+        cur = conn.cursor()   
+        cur.execute("SELECT name,img FROM `img_stuff`")
+        conn.commit()
+        result = cur.fetchall()
+        conn.close()
+        for i in range(len(result)):
+            name.append(result[i][0])
+            img.append(result[i][1])
+
+        imgs = []
+        for f in img:
+            imgs.append(f.split(","))
+
+      
+
+        return render_template("index.html",login=True,name=name,imgs=imgs)
     else:
         print("render 2")
-
         return render_template("index.html",login=False)
+
+
+
+@app.route("/edit_name",methods=["POST","GET"])
+def edit_name():
+    if request.method == "POST":
+        input1 = request.form["input1"]
+        input2 = request.form["input2"]
+       
+        new_input = input1
+        original_input = input2
+        index = session["names"].index(original_input)
+        session["names"][index] = new_input
+
+
+
+        # add new input to database replacing it with original input
+        conn = sqlite3.connect("stuff.db")
+        cur = conn.cursor()
+        cur.execute("UPDATE img_stuff SET name = :new_input WHERE name= :orignal_input",{"new_input":new_input, "orignal_input":original_input})
+
+        conn.commit()
+        conn.close()
+        return jsonify({"success":"renamed successfully"})
+
 
 
 

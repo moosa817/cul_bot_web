@@ -6,6 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home</title>
     <link rel="stylesheet" href="/static/css/style.css">
+    <!-- import jquery cdn -->
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
 </head>
 <body>
     {% block body %}
@@ -20,8 +23,68 @@ There was an error. Please try again
 {% endif %}
 
     {% if login %}
-    yay logged in 
-    <a href="/logout">Log Out</a>
+    <a class="logout" href="/logout">Log Out</a><br>
+    <h1 class="heading">Cul Bot Upload Images</h1>
+
+
+
+    <div class="h">
+        <span>Keyword</span>
+        <span>Images</span>
+    </div>
+
+    <div class="img-boxs">
+
+    {% for i in range(name|length) %}
+    <div class="img-box">
+        
+        <div class="box1">
+
+  <p class="edits" style="display:inline" id="edit-{{loop.index}}">{{name[i]}}</p>
+  <button class="edit-btn" type="submit" id="edit-button-{{loop.index}}" onclick="MakeEditable('edit-{{loop.index}}')"><i class="fa-solid fa-pen"></i></button>
+  <button class="end-btn" type="submit" id="end-button-{{loop.index}}" onclick="StopEditable('edit-{{loop.index}}')">Done</button>
+</div>
+
+
+
+
+<!-- <a href="/view/{{loop.index}}"><i class="fa-sharp fa-solid fa-eye"></i></a> -->
+
+
+
+
+
+
+
+<!-- 
+<a onclick="download_name('edit-{{loop.index}}')"><i class="fa-solid fa-download"></i></a>
+ Button trigger modal -->
+<!-- <a onclick="open_delete('edit-{{loop.index}}')" cursor:pointer;" data-bs-toggle="modal" data-bs-target="#exampleModal">
+  <i class="fa fa-solid fa-trash"></i> -->
+<!-- </a> --> 
+
+
+
+
+
+
+
+
+
+
+
+        <div class="i-box">
+        {% for g in imgs[i] %} 
+        <img src="{{g}}" alt="">
+        
+        {% endfor %}
+    </div>
+    </div>
+    {% endfor %}
+
+</div>
+
+    
     {% endif %}
 
 
@@ -41,4 +104,5 @@ There was an error. Please try again
 {% endblock %}
 
 </body>
+<script src="/static/js/main.js" type="text/javascript"></script>
 </html>
