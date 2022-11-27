@@ -23,6 +23,27 @@ There was an error. Please try again
 {% endif %}
 
     {% if login %}
+
+
+
+    <div class="modals">
+        <dialog class="dialog" id="modal-option-1">
+          <div class="dialog__wrapper">
+            <button class="dialog__close">✕</button>
+            <div id="stuff"></div>
+            <button class="btn-danger dialog__close2" onclick="delete_name()" type="button">Delete</button>
+          </div>
+    
+          </dialog>
+    
+    
+          </div>
+
+
+
+
+
+
     <a class="logout" href="/logout">Log Out</a><br>
     <h1 class="heading">Cul Bot Upload Images</h1>
 
@@ -36,32 +57,31 @@ There was an error. Please try again
     <div class="img-boxs">
 
     {% for i in range(name|length) %}
-    <div class="img-box">
+    <div class="img-box" id="f-{{loop.index}}">
         
         <div class="box1">
 
   <p class="edits" style="display:inline" id="edit-{{loop.index}}">{{name[i]}}</p>
   <button class="edit-btn" type="submit" id="edit-button-{{loop.index}}" onclick="MakeEditable('edit-{{loop.index}}')"><i class="fa-solid fa-pen"></i></button>
   <button class="end-btn" type="submit" id="end-button-{{loop.index}}" onclick="StopEditable('edit-{{loop.index}}')">Done</button>
+
+
+ 
+    <a style="margin-left:20px;" onclick="open_delete('edit-{{loop.index}}')" cursor:pointer; href="#modal-option-1">
+        <i class="fa fa-solid fa-trash"></i> 
+      </a> 
+
+ 
 </div>
 
 
 
 
-<!-- <a href="/view/{{loop.index}}"><i class="fa-sharp fa-solid fa-eye"></i></a> -->
 
 
 
 
 
-
-
-<!-- 
-<a onclick="download_name('edit-{{loop.index}}')"><i class="fa-solid fa-download"></i></a>
- Button trigger modal -->
-<!-- <a onclick="open_delete('edit-{{loop.index}}')" cursor:pointer;" data-bs-toggle="modal" data-bs-target="#exampleModal">
-  <i class="fa fa-solid fa-trash"></i> -->
-<!-- </a> --> 
 
 
 
@@ -85,6 +105,43 @@ There was an error. Please try again
 </div>
 
     
+
+<!-- Modal for delete name -->
+<!-- <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Confirm Delete</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="modal-body">
+        
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button onclick="delete_name()" type="button" class="btn btn-danger" data-bs-dismiss="modal">Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>
+   -->
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
     {% endif %}
 
 

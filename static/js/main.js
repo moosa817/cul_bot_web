@@ -1,3 +1,65 @@
+// modal
+
+// Get all links that start with #modal
+const modalLinks = document.querySelectorAll('a[href^="#modal"]');
+
+modalLinks.forEach(function (modalLink, index) {
+  // Get modal ID to match the modal
+  const modalId = modalLink.getAttribute('href');
+  
+  // Click on link
+  modalLink.addEventListener('click', function (event) {
+    
+    // Get modal element
+    const modal = document.querySelector(modalId);
+    // If modal with an ID exists
+    if(modal){
+      // Get close button
+      const closeBtn = modal.querySelector('.dialog__close');
+      const closeBtn2 = modal.querySelector('.dialog__close2');
+
+      event.preventDefault();
+      modal.showModal(); // Open modal
+      
+      // Close modal on click
+      closeBtn.addEventListener('click', function (event) {
+        modal.close();
+      });
+
+      closeBtn2.addEventListener('click', function (event){
+        modal.close();
+      });
+      
+      // Close modal when clicking outside modal
+      document.addEventListener('click', function (event) {
+        
+        const dialogEl = event.target.tagName;
+        const dialogElId = event.target.getAttribute('id');
+        if(dialogEl == 'DIALOG'){
+          // Close modal
+          modal.close();
+        }
+      }, false);
+      
+    // If modal ID not exists
+    } else {
+      console.log('Modal doesn\'t exist');
+    }
+  });
+});
+
+// /modal stop
+
+
+
+
+
+
+
+
+
+
+
 // to stop the browser from resubmit
 if ( window.history.replaceState ) {
     window.history.replaceState( null, null, window.location.href );
@@ -85,9 +147,6 @@ function StopEditable(id) {
 
 
 
-
-
-
 elements = document.getElementsByClassName("edits");
 
 for (var i = 0; i < elements.length; i++) {
@@ -97,3 +156,30 @@ for (var i = 0; i < elements.length; i++) {
     }
   })
 };
+
+// delete_name
+var f 
+var id_no
+function open_delete(id){
+  myArray = id.split("-");
+  id_no = myArray[1]
+  f = document.getElementById(id).innerHTML
+  document.getElementById("stuff").innerHTML  = "You Sure you want to delete " + '<b>'+ f + '</b>' 
+
+}
+// file delete
+function delete_name(){
+  $.ajax({
+    data: {
+      delete_input: f
+    },
+    type: 'POST',
+    url: '/delete_name'
+  })
+.done(function (data) {
+ if (data.success === true){
+  e_id = "f-"+id_no
+  console.log(e_id)
+  document.getElementById(e_id).remove()
+}
+})};

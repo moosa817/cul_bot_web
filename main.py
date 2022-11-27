@@ -157,6 +157,21 @@ def edit_name():
         return jsonify({"success":"renamed successfully"})
 
 
+@app.route("/delete_name",methods=["POST"])
+def delete_name():
+    if request.method == "POST":
+        delete_input = request.form["delete_input"]
+        try:
+            session["names"].remove(delete_input)
+            conn = sqlite3.connect("stuff.db")
+            cur = conn.cursor()
+
+            cur.execute("DELETE FROM img_stuff WHERE name = :orignal_input", {"orignal_input":delete_input})
+            conn.commit()
+            conn.close()
+            return jsonify({"success":True})
+        except:
+            return jsonify({"success": False})
 
 
 @app.route("/logout")
