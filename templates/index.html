@@ -94,8 +94,15 @@ There was an error. Please try again
 
 
         <div class="i-box">
+
         {% for g in imgs[i] %} 
-        <img src="{{g}}" alt="">
+        <div style="position:relative; display:inline;" id="I-{{i}}-{{loop.index}}">
+      
+          <button id="c-{{loop.index}}" class="close AClass" onclick="delete_img('img-{{i}}-{{loop.index}}')">
+             <span>&times;</span>
+          </button>
+          <img src="{{g}}" class="modal-target" id="img-{{i}}-{{loop.index}}" onerror="this.onerror=null; this.src='https://media.discordapp.net/attachments/868218686366949416/1047090569689710643/attachment.png'" alt="No image">
+        </div>
         
         {% endfor %}
     </div>
@@ -106,25 +113,12 @@ There was an error. Please try again
 
     
 
-<!-- Modal for delete name -->
-<!-- <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Confirm Delete</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body" id="modal-body">
-        
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button onclick="delete_name()" type="button" class="btn btn-danger" data-bs-dismiss="modal">Delete</button>
-        </div>
-      </div>
-    </div>
-  </div>
-   -->
+<!-- The Modal -->
+<div id="modal" class="modal">
+  <span id="modal-close" class="modal-close">&times;</span>
+  <img id="modal-content" class="modal-content">
+  <div id="modal-caption" class="modal-caption"></div>
+</div>
   
 
 

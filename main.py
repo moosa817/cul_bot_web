@@ -94,7 +94,6 @@ def index():
             for f in img:
                 imgs.append(f.split(","))
 
-        
             session["names"] = name
             session["imgs"] = imgs
             return render_template("index.html",login=True,name=name,imgs=imgs)
@@ -103,7 +102,7 @@ def index():
         if username == "cul" and pwd=="cul":
             return login(username,pwd)
         else:
-            print("render 1")
+            # print("render 1")
             return render_template("index.html",stuff="error")
 
 
@@ -125,11 +124,12 @@ def index():
         for f in img:
             imgs.append(f.split(","))
 
-      
+        session["names"] = name
+        session["imgs"] = imgs
 
         return render_template("index.html",login=True,name=name,imgs=imgs)
     else:
-        print("render 2")
+        # print("render 2")
         return render_template("index.html",login=False)
 
 
@@ -172,6 +172,46 @@ def delete_name():
             return jsonify({"success":True})
         except:
             return jsonify({"success": False})
+
+
+@app.route("/del_img",methods=["POST"])
+def del_img():
+    if request.method == "POST":
+        row_no = request.form["row_no"]
+        img_no = request.form["img_no"]
+
+        
+
+        row_no = int(row_no)
+        img_no = int(img_no)
+
+
+        name = session["names"][row_no]
+        try:
+            session["imgs"][row_no][img_no] = ""
+            img_row = session["imgs"][row_no]
+            # print(img_row)
+
+
+            img_copy = list(filter(None, img_row))
+            a = ",".join(img_copy)
+            # print(a)
+            conn = sqlite3.connect("stuff.db")
+            cur = conn.cursor()
+
+            cur.execute("UPDATE img_stuff SET img = :a WHERE name = :orignal_input", {"a":a,"orignal_input":name})
+            # result = cur.fetchall()
+            # print(result)
+            conn.commit()
+            conn.close()
+
+
+            return jsonify({"success":True})
+        except Exception as e:
+            print(e)
+            return jsonify({"success": False})
+
+
 
 
 @app.route("/logout")

@@ -1,3 +1,33 @@
+//modal for image
+
+// Modal Setup
+var modal = document.getElementById('modal');
+
+var modalClose = document.getElementById('modal-close');
+modalClose.addEventListener('click', function() { 
+  modal.style.display = "none";
+});
+
+// global handler
+document.addEventListener('click', function (e) { 
+  if (e.target.className.indexOf('modal-target') !== -1) {
+      var img = e.target;
+      var modalImg = document.getElementById("modal-content");
+      var captionText = document.getElementById("modal-caption");
+      modal.style.display = "block";
+      modalImg.src = img.src;
+      captionText.innerHTML = img.alt;
+   }
+});
+
+
+//modal for image end
+
+
+
+
+
+
 // modal
 
 // Get all links that start with #modal
@@ -183,3 +213,33 @@ function delete_name(){
   document.getElementById(e_id).remove()
 }
 })};
+
+
+function delete_img(id){
+  console.log("delete img")
+  var img_del = document.getElementById(id)
+  lis = id.split("-")
+  row_no = lis[1]
+  img_no = lis[2] - 1
+
+  console.log(row_no,img_no)
+
+  $.ajax({
+    data: {
+      row_no: row_no,
+      img_no: img_no
+    },
+    type: 'POST',
+    url: '/del_img'
+  })
+.done(function (data) {
+ if (data.success === true){
+  console.log("success");
+  img_no = img_no + 1
+  o = 'I-'+row_no+'-'+img_no
+  // console.log(o)
+  document.getElementById(o).remove()
+}})
+
+
+}
