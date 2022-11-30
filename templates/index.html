@@ -26,6 +26,9 @@ There was an error. Please try again
 
 
 
+
+
+
     <div class="modals">
         <dialog class="dialog" id="modal-option-1">
           <div class="dialog__wrapper">
@@ -40,6 +43,42 @@ There was an error. Please try again
           </div>
 
 
+<!-- modal for adding imgs -->
+
+<div class="modals3">
+  <dialog class="dialog2" id="modal-option-3">
+    <div class="dialog__wrapper2">
+      <button id="close" class="dialog__close">✕</button>
+      <div id="buttons">
+        <button id="tab1">URL</button>
+        <button id="tab2">From files</button>
+      </div>
+      <div id="pages">
+        
+        
+        <p id="toChange">
+            </p>
+       
+
+
+            <div id="page1" style="display:none;">page 1</div>
+      <div id="page2" style="display:none;"> page 2</div>
+
+
+
+
+
+
+      <!-- close button -->
+      <!-- <button class="btn-danger dialog__close2" type="button">img</button> -->
+    </div>
+
+    </dialog>
+
+
+    </div>
+
+
 
 
 
@@ -49,8 +88,21 @@ There was an error. Please try again
 
 
 
+          <form method="post" style="margin-bottom:5%;">
+            <h1>Add Keyword</h1>
+            <input type="text" name="key" id="key" style="width:70%;">
+            <input class="add" type="submit" value="Add" style="width:10%;">
+            {% if stuff_error %}
+            <div class="error">
+        {{stuff_error}}
+        </div>
+        {% endif %}
+          </form>
+
+   
+
     <div class="h">
-        <span>Keyword</span>
+        <span>Keywords</span>
         <span>Images</span>
     </div>
 
@@ -92,16 +144,19 @@ There was an error. Please try again
 
 
 
-
         <div class="i-box">
 
+          <a href="#modal-option-3" id="">
+<div class="add-box">+</div>
+</a>
         {% for g in imgs[i] %} 
+    
         <div style="position:relative; display:inline;" id="I-{{i}}-{{loop.index}}">
       
           <button id="c-{{loop.index}}" class="close AClass" onclick="delete_img('img-{{i}}-{{loop.index}}')">
              <span>&times;</span>
           </button>
-          <img src="{{g}}" class="modal-target" id="img-{{i}}-{{loop.index}}" onerror="this.onerror=null; this.src='https://media.discordapp.net/attachments/868218686366949416/1047090569689710643/attachment.png'" alt="No image">
+          <img src="{{g}}" class="modal-target" id="img-{{i}}-{{loop.index}}" onerror="this.onerror=null; this.src='https://media.discordapp.net/attachments/868218686366949416/1047090569689710643/attachment.png'">
         </div>
         
         {% endfor %}

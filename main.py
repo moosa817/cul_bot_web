@@ -72,40 +72,63 @@ async def on_ready():
 @app.route("/",methods=["GET", "POST"])
 def index():
     if request.method == "POST":
-        username = request.form["name"]
-        pwd = request.form["pwd"]
+        if request.form.get("name"):
+            username = request.form["name"]
+            pwd = request.form["pwd"]
 
-        def login(username, password):
-            session["username"] = username
-            session["password"] = password
-            name = []
-            img = []
+            def login(username, password):
+                session["username"] = username
+                session["password"] = password
+                name = []
+                img = []
+                conn = sqlite3.connect("stuff.db")
+                cur = conn.cursor()   
+                cur.execute("SELECT name,img FROM `img_stuff`")
+                conn.commit()
+                result = cur.fetchall()
+                conn.close()
+                for i in range(len(result)):
+                    name.append(result[i][0])
+                    img.append(result[i][1])
+
+                imgs = []
+                for f in img:
+                    if f is not None:
+                        imgs.append(f.split(","))
+
+                session["names"] = name
+                session["imgs"] = imgs
+                return render_template("index.html",login=True,name=name,imgs=imgs)
+
+
+            if username == "cul" and pwd=="cul":
+                return login(username,pwd)
+            else:
+                # print("render 1")
+                return render_template("index.html",stuff="error")
+
+        elif request.form.get("key"):
+            key = request.form["key"]
             conn = sqlite3.connect("stuff.db")
             cur = conn.cursor()   
-            cur.execute("SELECT name,img FROM `img_stuff`")
+            cur.execute("SELECT name,img FROM `img_stuff` WHERE name = :orignal_input", {"orignal_input":key})
             conn.commit()
             result = cur.fetchall()
             conn.close()
-            for i in range(len(result)):
-                name.append(result[i][0])
-                img.append(result[i][1])
+            
+            if result:
+                return render_template("index.html",login=True,name=session["names"],imgs=session["imgs"],stuff_error="Already exists")
 
-            imgs = []
-            for f in img:
-                imgs.append(f.split(","))
-
-            session["names"] = name
-            session["imgs"] = imgs
-            return render_template("index.html",login=True,name=name,imgs=imgs)
-
-
-        if username == "cul" and pwd=="cul":
-            return login(username,pwd)
-        else:
-            # print("render 1")
-            return render_template("index.html",stuff="error")
-
-
+            elif len(key) >50:
+                return render_template("index.html",login=True,name=session["names"],imgs=session["imgs"],stuff_error="Too Long")
+            else:
+                conn = sqlite3.connect("stuff.db")
+                cur = conn.cursor()   
+                cur.execute("INSERT INTO `img_stuff` (name,img) VALUES ( :orignal_input ,:b )", {"orignal_input":key,"b":""})
+                conn.commit()
+                conn.close()
+                session["names"].append(key)
+                return render_template("index.html",login=True,name=session["names"],imgs=session["imgs"])
 
     if session.get('username'):
         name = []
@@ -121,8 +144,10 @@ def index():
             img.append(result[i][1])
 
         imgs = []
+
         for f in img:
-            imgs.append(f.split(","))
+            if f is not None:
+                imgs.append(f.split(","))
 
         session["names"] = name
         session["imgs"] = imgs
