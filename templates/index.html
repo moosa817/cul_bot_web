@@ -60,10 +60,34 @@ There was an error. Please try again
             </p>
        
 
+              
+            <div id="page1" style="display:none;">
+             
+                <h1 style="margin-top:20px; margin-bottom:0px;background:whitesmoke; color:black">Add Image Through URL</h1>
+                
+                <h1 id="name_for_url" style="background:whitesmoke; color:black"></h1>
+                <div id="url-error" style="display:none">Unvalid URL</div>
+          
+              
+              <form method="post" class="url-form">
+                <input id="name-url" type="hidden" name="name-url" value="">
+                <input id="url" type="text" name="thumbnail" placeholder="Enter URL">
+                <button type="button" id="add">Add</button>
 
-            <div id="page1" style="display:none;">page 1</div>
-      <div id="page2" style="display:none;"> page 2</div>
 
+
+                <img class="preview" onerror="document.getElementById('url-error').style.display = 'block';document.getElementById('url-submit').style.display = 'none';">
+
+                <input id="url-submit" class="submit-url" type="submit" value="Submit">
+              </form>
+              
+  
+              
+            
+            
+            </div>
+      <div id="page2" style="display:none;" class="pg2"> page 2</div>
+           
 
 
 
@@ -79,7 +103,7 @@ There was an error. Please try again
     </div>
 
 
-
+<!-- modal ending -->
 
 
 
@@ -147,7 +171,7 @@ There was an error. Please try again
         <div class="i-box">
 
           <a href="#modal-option-3" id="">
-<div class="add-box">+</div>
+<button onclick="do_stuff('{{name[i]}}')" class="add-box" id="{{name[i]}}">+</button>
 </a>
         {% for g in imgs[i] %} 
     

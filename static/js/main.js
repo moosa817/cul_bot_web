@@ -136,11 +136,23 @@ modalLinks2.forEach(function (modalLink, index) {
   
   // Click on link
   modalLink.addEventListener('click', function (event) {
-      // console.log("clicked")
+
+    // a = document.getElementById('name_for_url');
+    // a.innerHTML = "yay"
+    // a.style.display = 'block';
+    // console.log(a)
+
+
+
     // Get modal element
     const modal = document.querySelector(modalId);
     // If modal with an ID exists
     if(modal){
+     
+
+
+
+
       // Get close button
       const closeBtn = modal.querySelector('.dialog__close');
 
@@ -331,4 +343,44 @@ function delete_img(id){
 }})
 
 
+}
+
+$(function(){
+  var keyStop = {
+    8: ":not(input:text, textarea, input:file, input:password)", // stop backspace = back
+    13: "input:text, input:password", // stop enter = submit 
+ 
+    end: null
+  };
+  $(document).bind("keydown", function(event){
+   var selector = keyStop[event.which];
+ 
+   if(selector !== undefined && $(event.target).is(selector)) {
+       event.preventDefault(); //stop event
+   }
+   return true;
+  });
+ });
+
+
+// on add click
+$('#add').click(function(){
+// $('[name="thumbnail"]').on('change', function() {
+  p = document.getElementById('url').value
+  document.getElementById('url-error').style.display = 'none';
+  console.log(p)
+
+  a = $('img.preview').prop('src', p);
+  document.getElementById('url-submit').style.display = 'block';
+  console.log(a)
+// });
+
+
+});
+
+
+// some stuff for modal of adding image
+function do_stuff(name){
+  document.getElementById('name_for_url').innerHTML = name
+  document.getElementById('name-url').value = name
 }
