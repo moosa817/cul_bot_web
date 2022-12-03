@@ -2,17 +2,21 @@
 // document.getElementById("Hidenews").style.display = "none";
 // document.getElementById("tab1").className = "highlight";
 // document.getElementById("header").innerHTML = "Crafts";
-
+var name_url 
 //Set classes and page ^ v
 document.getElementById("tab1").addEventListener("click", highlight1);
 document.getElementById("tab2").addEventListener("click", highlight2);
 
 
 document.getElementById("toChange").innerHTML = document.getElementById("page1").innerHTML
+document.getElementById('name_for_url').innerHTML = name_url
+
 //What happens when you click on tab 1:
 function highlight1() {
+  // console.log(name_url)
+  document.getElementById('name_for_url').innerHTML = name_url
   document.getElementById("tab1").className = "highlight";
-  document.getElementById("tab2").className = "none";
+  // document.getElementById("tab2").className = "none";
   // document.getElementById("header").innerHTML = "Crafts";
   document.getElementById("toChange").innerHTML =
     document.getElementById("page1").innerHTML
@@ -20,7 +24,7 @@ function highlight1() {
 //What happens when you click on tab 2:
 function highlight2() {
   document.getElementById("tab2").className = "highlight";
-  document.getElementById("tab1").className = "none";
+  // document.getElementById("tab1").className = "none";
   // document.getElementById("header").innerHTML = "News page";
   document.getElementById("toChange").innerHTML =
   document.getElementById("page2").innerHTML
@@ -382,5 +386,24 @@ $('#add').click(function(){
 // some stuff for modal of adding image
 function do_stuff(name){
   document.getElementById('name_for_url').innerHTML = name
+  document.getElementById('name_for_url2').innerHTML = name
+  name_url = name
   document.getElementById('name-url').value = name
+  document.getElementById('name-url2').value = name
+
 }
+
+
+     function readURL(input) {
+            if (input.files && input.files[0]) {
+              document.getElementById('url-submit').style.display = 'inline-block';
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#blah')
+                        .attr('src', e.target.result);
+                };
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }

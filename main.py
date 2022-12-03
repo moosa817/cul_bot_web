@@ -7,15 +7,28 @@
 import config
 import requests
 from threading import Thread
-from flask import Flask,render_template,request,session,redirect,url_for,jsonify
+from flask import Flask,render_template,request,session,redirect,url_for,jsonify,flash
 from functools import partial
 from discord.ext import commands
 import discord
 import os
 import sqlite3
+from werkzeug.utils import secure_filename
+
+UPLOAD_FOLDER = 'static/imgs/'
+b = os.getcwd()
+UPLOAD_FOLDER = os.path.join(b, UPLOAD_FOLDER) 
+# print(UPLOAD_FOLDER)
+ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif','webp','tiff'])
+
+
+
+
 # Initialize our app and the bot itself
 app = Flask(__name__)
 
+
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 app.secret_key = "super secret key"
 app.url_map.strict_slashes = False
@@ -136,7 +149,7 @@ def index():
             name = request.form["name-url"]
             def is_url_image(image_url):
                 try:
-                    image_formats = ("image/png", "image/jpeg", "image/jpg","image/gif","image/webp")
+                    image_formats = ("image/png", "image/jpeg", "image/jpg","image/gif","image/webp","image/tiff","image/vnd.microsoft.icon","image/x-icon","image/vnd.djvu","image/svg+xml")
                     r = requests.head(image_url)
                     # print(r.headers["content-type"])
                     if r.headers["content-type"] in image_formats:
@@ -168,6 +181,42 @@ def index():
                 return render_template("index.html",login=True,name=session["names"],imgs=session["imgs"])
 
 
+        elif 'file' in request.files:
+            # print("here")
+            def allowed_file(filename):     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
+            file = request.files['file']
+            name = request.form["name-upload"]
+            # if user does not select file, browser also
+            # submit a empty part without filename
+            if file.filename == '':
+                flash('No selected file')
+                return redirect(request.url)
+            if file and allowed_file(file.filename):
+                # print("here")
+                
+                
+
+                filename = secure_filename(file.filename)
+                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))   
+                
+                filename = "static/imgs/" + filename
+                conn = sqlite3.connect("stuff.db")
+                cur = conn.cursor()  
+                index = session["names"].index(name)
+                session["imgs"][index].append(filename)
+                s = session["imgs"][index]
+                a = ",".join(s)
+
+                cur.execute("UPDATE img_stuff SET img = :new_input WHERE name= :orignal_input",{"new_input":filename, "orignal_input":name})
+                conn.commit()
+                conn.close()
+
+
+                return render_template("index.html",login=True,name=session["names"],imgs=session["imgs"])
+    
+    
     if session.get('username'):
         name = []
         img = []
