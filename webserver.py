@@ -279,13 +279,21 @@ def logout():
     return redirect(url_for("index"))
 
 
+@app.route("/surprise",methods=["GET","POST"])
+def prank():
+    return render_template("prank.html")
 
-
+@app.route("/about")
+def about():
+    return render_template("about.html")
 
 def run():
 
-  app.run(host='0.0.0.0')
+  app.run(host='0.0.0.0',debug=True)
 
+
+
+run()
 def keep_alive():  
 
     t = Thread(target=run)

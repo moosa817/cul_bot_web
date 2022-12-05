@@ -427,3 +427,33 @@ form input{
     content: 'Keyword: ';
     font-weight: normal;
   }
+
+  footer{
+    margin:0;
+
+    position:absolute;
+    bottom:0;
+    border:3px solid whitesmoke;
+    border-right: none;
+    border-left: none;
+    border-bottom:none;
+    width:100vw;
+  }
+ .footer-stuff{
+  padding:20px;
+  text-align: center;
+ }
+ .footer-stuff .btn1{
+  border:none;
+  background:rgb(190, 17, 17);
+  padding:10px;
+  border-radius:5px;
+  margin-right:5%;
+ }
+ .footer-stuff .btn2{
+  border: none;
+  background:#bbb;
+  border-radius:5px;
+  padding:10px;
+  color:black;
+ }

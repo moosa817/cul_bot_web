@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<body>
+    <link rel="shortcut icon" href="/static/favicon.ico" type="image/x-icon">
+    
+    <head>
+        <title>surprise :)</title>
+        <!-- jquery cdn -->
+    </head>
+    <style>
+        *{
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+        .vid{
+            padding:0;
+            margin:0;
+            width:20%;
+            height:20;
+        }
+    </style>
+
+<div id="demo"></div>
+<div class="smth">
+    <br>
+<center>
+<img src="/static/bait.jpg" height="600px" width="400px" id="clickme" alt="click me">
+</center>
+</div>
+
+<!-- mp3  -->
+<audio id="o">
+    <source src="/static/hehe.mp3" type="audio/ogg">
+    <source src="/static/hehe.mp3" type="audio/mpeg">
+  Your browser does not support the audio element.
+  </audio>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+    
+
+$( document.body ).click(function() {
+    var x ="", i;
+    for (i=1; i<=20; i++) {
+      x = x+ "<video autoplay muted class='vid' id='vid'><source src='../static/prank.mp4' type='video/mp4'><source src='../static/prank.ogg' type='video/ogg'>Your browser does not support the video tag.</video>";
+    }
+    var a = document.getElementById("demo")
+    a.innerHTML = x;
+    O = document.getElementById("o");
+    O.play()   
+});
+
+
+
+</script>
+
+
+
+</body>
+</html> 
