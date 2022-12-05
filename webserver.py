@@ -4,6 +4,7 @@ from flask import Flask,render_template,request,session,redirect,url_for,jsonify
 import sqlite3
 from werkzeug.utils import secure_filename
 import os
+import datetime
 
 UPLOAD_FOLDER = 'static/imgs/'
 b = os.getcwd()
@@ -28,6 +29,40 @@ def make_session_permanent():
     session.permanent = True 
 
 
+@app.route("/log",methods=["GET", "POST"])
+def log():
+# log stuff
+    print("logging")
+    ip = request.form["ip"]
+    now = datetime.datetime.now()
+    utcnow = datetime.datetime.utcnow()
+    diff = utcnow-now
+
+    diff_hr = diff.total_seconds()/60/60
+    diff_hr = "{:.1f}".format(diff_hr)
+
+    diff_hr = float(diff_hr)
+    diff_hr = int(diff_hr)
+   
+    
+    
+
+    def convert(seconds):
+        min, sec = divmod(seconds, 60)
+        hour, min = divmod(min, 60)
+        return '%d:%02d:%02d' % (hour, min, sec)
+
+    time_diff = convert(diff.total_seconds())
+
+    if diff.total_seconds() < 0:
+        final_time = now.strftime(f"%a %d %b %H:%M:%S{time_diff}")
+    else:
+        final_time = now.strftime(f"%a %d %b %H:%M:%S+{time_diff}")
+
+    
+    f = open('logs.csv','a')
+    f.write(f'\n{ip},{final_time}')
+    return jsonify({"success": True})
 
 # Set up the 'index' route
 @app.route("/",methods=["GET", "POST"])

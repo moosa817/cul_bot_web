@@ -1,3 +1,40 @@
+//log stuff
+
+
+
+
+ 
+ if(sessionStorage.getItem('session')){}
+
+else{
+  $.getJSON('http://ip-api.com/json', function(data) {
+    ip = data["query"]
+  sessionStorage.setItem('session',true)
+  $.ajax({
+    data: {
+      ip,ip
+    },
+    type: 'POST',
+    url: '/log'
+  })
+  .done(function (data) {});
+
+
+  
+  })
+};
+
+
+
+
+
+
+
+
+
+
+
+
 //js for image upload page
 // document.getElementById("Hidenews").style.display = "none";
 // document.getElementById("tab1").className = "highlight";
