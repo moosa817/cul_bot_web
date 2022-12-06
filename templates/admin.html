@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="shortcut icon" href="/static/favicon.ico" type="image/x-icon">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="/static/css/admin.css">
+    <!-- import jquery cdn -->
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+
+
+
+
+
+    <meta id="my-data" data-ips="{{ips}}" data-times="{{times}}">
+</head>
+<body>
+    {% block body %}
+
+
+    {% if not login %}
+    <h1 class="heading">Admin Login</h1>
+<form method="POST">
+    <input type="text" name="name" id="name" placeholder="username" required><br>
+    <input type="password" name="pwd" id="pwd" placeholder="password" required><br>
+    <input type="submit" value="Login" class="btn-login">
+</form>
+
+
+
+
+
+    {% endif %}
+
+    {% if stuff %}
+    <div class="error">
+There was an error. Please try again
+</div>
+{% endif %}
+
+{% if login %}
+<a class="logout" href="/logout">Log Out</a><br>
+    <h1 class="heading">Admin Page</h1>
+    <table>
+        <th>Ips</th>
+        <th>Time</th>
+        {% for i in range(ips|length) %}
+       
+        <tr>
+            
+            <td>{{ips[i]}} 
+               
+                <a onclick="btnclick('{{i}}')">
+                   
+                <i class="fa fa-solid fa-search"></i>
+            </a>
+       
+            </td>
+       
+            <td>{{times[i]}}</td>
+        </tr>
+<!-- The Modal -->
+<div id="myModal-{{i}}" class="modal">
+
+    <!-- Modal content -->
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <div class="in-heading" id="in-heading-{{i}}">Some info About</div>
+
+      <div id="in-stuff-{{i}}" class="instuff">
+        Loading stuff.....
+      </div>
+    </div>
+  
+  </div>
+        {%endfor%}
+    </table>
+    
+
+{% endif %}
+
+<footer>
+  <div class="footer-stuff">
+    <a href="/surprise" target="_blank"><button class="btn1">Just a Button</button></a>
+    
+    <a href="/about" target="_blank"><button class="btn2">About</button></a>
+    
+
+    
+  </div>
+  
+</footer>
+   
+
+
+
+  
+
+{% endblock %}
+
+</body>
+<script src="/static/js/admin.js" type="text/javascript"></script>
+</html>

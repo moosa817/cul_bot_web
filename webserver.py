@@ -29,10 +29,57 @@ def make_session_permanent():
     session.permanent = True 
 
 
+@app.route("/admin",methods=["GET","POST"])
+def admin():
+    if request.method == "POST":
+        if request.form.get("name"):
+            username = request.form["name"]
+            pwd = request.form["pwd"]
+
+
+            if username == "moosa" and pwd=="sk96Jaffasaladflask":
+                session["admin_login"] = True
+                f = open("logs.csv","r")
+                ips = []
+                time = []
+                for i in f.readlines():
+                    a,b = i.split(",")
+                    b = b.split("\n")
+                    b = b[0]
+
+                    ips.append(a)
+                    time.append(b)
+
+                del ips[0]
+                del time[0]
+                # print(ips,time)
+                return render_template("admin.html",login=True,ips=ips,times=time)
+            else:
+                # print("render 1")
+                return render_template("admin.html",stuff=True)
+    elif session.get("admin_login"):
+        f = open("logs.csv","r")
+        ips = []
+        time = []
+        for i in f.readlines():
+            a,b = i.split(",")
+            b = b.split("\n")
+            b = b[0]
+
+            ips.append(a)
+            time.append(b)
+
+        del ips[0]
+        del time[0]
+        # print(ips,time)
+        return render_template("admin.html",login=True,ips=ips,times=time)
+    return render_template("admin.html")
+
+
 @app.route("/log",methods=["GET", "POST"])
 def log():
 # log stuff
-    print("logging")
+    # print("logging")
     ip = request.form["ip"]
     now = datetime.datetime.now()
     utcnow = datetime.datetime.utcnow()
@@ -324,11 +371,11 @@ def about():
 
 def run():
 
-  app.run(host='0.0.0.0',debug=True)
+  app.run(host='0.0.0.0')
 
 
 
-run()
+# run()
 def keep_alive():  
 
     t = Thread(target=run)
