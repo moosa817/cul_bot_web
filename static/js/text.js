@@ -279,3 +279,68 @@ function do_stuff(name){
                 reader.readAsDataURL(input.files[0]);
             }
         }
+
+
+
+function MakeEditable1(id) {
+  orignal_para = document.getElementById(id).innerHTML;
+  var paragraph = document.getElementById(id);
+
+  paragraph.contentEditable = true;
+  paragraph.style.backgroundColor = "#222222";
+  paragraph.focus();
+
+  myArray = id.split("-");
+
+  id_no = myArray[1]
+  //   console.log(id_no)
+  edit_id = "edit-button1-" + id_no
+  end_id = "end-button1-" + id_no
+  document.getElementById(end_id).style.display = "inline-block";
+  document.getElementById(edit_id).style.display = "none";
+};
+
+
+function StopEditable1(id) {
+  var paragraph = document.getElementById(id);
+  paragraph.contentEditable = false;
+  paragraph.style.backgroundColor = "#333333";
+
+
+
+
+  id_no = myArray[1]
+  edit_id = "edit-button1-" + id_no
+  end_id = "end-button1-" + id_no
+  document.getElementById(edit_id).style.display = "inline-block";
+  document.getElementById(end_id).style.display = "none";
+
+
+  input1 = paragraph.innerHTML
+  input2 = orignal_para
+
+  console.log(input1)
+  console.log(input2)
+
+
+  $.ajax({
+    data: {
+      input1: input1,
+      input2: input2
+    },
+    type: 'POST',
+    url: '/edit_txt_txt'
+  })
+.done(function (data) {
+  if (data.error){
+    document.getElementById('error').style.display = "block";
+    document.getElementById('error').innerHTML = data.error
+    console.log(orignal_para)
+    paragraph.innerHTML = orignal_para
+  }
+
+  
+
+});
+
+}

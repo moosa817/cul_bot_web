@@ -47,6 +47,7 @@ def text():
                 conn.commit()
                 conn.close()
                 session["txt_name"].append(key)
+                session["txt_text"].append("")
                 return render_template("text.html",login=True,name=session["txt_name"] ,txt=session["txt_text"])
 
     if session.get("username"):

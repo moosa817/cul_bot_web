@@ -5,7 +5,7 @@ from flask_files.index_edit import delete_img,delete_name,edit_name
 from flask_files.admin_edit import log_page
 from flask_files.file_admin import admin_page
 from flask_files.file_txt import txt_page
-from flask_files.txt_edit import edit_txt_name,delete_txt_name
+from flask_files.txt_edit import edit_txt_name,delete_txt_name,edit_txt_txt
 UPLOAD_FOLDER = 'static/imgs/'
 b = os.getcwd()
 UPLOAD_FOLDER = os.path.join(b, UPLOAD_FOLDER) 
@@ -29,6 +29,7 @@ app.register_blueprint(log_page)
 app.register_blueprint(txt_page)
 app.register_blueprint(edit_txt_name)
 app.register_blueprint(delete_txt_name)
+app.register_blueprint(edit_txt_txt)
 
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER

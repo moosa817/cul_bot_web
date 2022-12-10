@@ -472,3 +472,10 @@ form input{
   background: white;
   transition: 0.9s;
 }
+.o{
+  max-width:50%;
+  
+}
+.o p{
+  overflow-wrap: break-word;
+}

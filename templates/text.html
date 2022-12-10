@@ -44,84 +44,6 @@ There was an error. Please try again
           </div>
 
 
-<!-- modal for adding imgs -->
-
-<div class="modals3">
-  <dialog class="dialog2" id="modal-option-3">
-    <div class="dialog__wrapper2">
-      <button id="close" class="dialog__close">✕</button>
-      <div id="buttons">
-        <button id="tab1">URL</button>
-        <button id="tab2">From files</button>
-      </div>
-      <div id="pages">
-        
-        
-        <p id="toChange">
-            </p>
-       
-
-              
-            <div id="page1" style="display:none;">
-             
-                <h1 style="margin-top:20px; margin-bottom:0px;background:whitesmoke; color:black">Add Image Through URL</h1>
-                
-                <h1 id="name_for_url" style="background:whitesmoke; color:black"></h1>
-                <div id="url-error" style="display:none">Unvalid URL</div>
-          
-              
-              <form method="post" class="url-form">
-                <input id="name-url" type="hidden" name="name-url" value="">
-                <input id="url" type="text" name="thumbnail" placeholder="Enter URL">
-                <button type="button" id="add">Add</button>
-
-
-
-                <img class="preview" onerror="document.getElementById('url-error').style.display = 'block';document.getElementById('url-submit').style.display = 'none';">
-
-                <input id="url-submit" class="submit-url" type="submit" value="Submit">
-              </form>
-              
-  
-              
-            
-            
-            </div>
-      <div id="page2" style="display:none;" class="pg2"> 
-        <h1 style="margin-top:20px; margin-bottom:0px;background:whitesmoke; color:black">Upload Image</h1>
-        <h1 id="name_for_url2" style="background:whitesmoke; color:black"></h1><br>
-        also images/gifs larger than 2mb gets ingored<br>
-        <form method="post" class="url-form" enctype="multipart/form-data">
-          <input id="name-url2" type="hidden" name="name-upload" value="">
-          <input name="file" type='file' onchange="readURL(this);" />
-
-          <img class="preview2"  id="blah" src="http://placehold.it/180" alt="" />
-          <input id="url-submit" class="submit-url" type="submit" value="Submit">
-        </form>
-
-
-
-        
-
-      
-      
-      
-      
-      </div>
-           
-
-
-
-
-
-      <!-- close button -->
-      <!-- <button class="btn-danger dialog__close2" type="button">img</button> -->
-    </div>
-
-    </dialog>
-
-
-    </div>
 
 
 <!-- modal ending -->
@@ -169,16 +91,21 @@ There was an error. Please try again
         <i class="fa fa-solid fa-trash"></i> 
       </a> 
 
+
+
+       
  
 </div>
 
 
+<div class="o">
+
+<p contenteditable="true" class="edits1" style="display:inline; width:40vw;" id="edit1-{{loop.index}}">{{txt[i]}}</p>
+  <button class="edit-btn" type="submit" id="edit-button1-{{loop.index}}" onclick="MakeEditable1('edit1-{{loop.index}}')"><i class="fa-solid fa-pen"></i></button>
+  <button class="end-btn" type="submit" id="end-button1-{{loop.index}}" onclick="StopEditable1('edit1-{{loop.index}}')">Done</button>
 
 
-
-
-
-
+</div>
 
 
 
@@ -224,17 +151,6 @@ There was an error. Please try again
 
     {% endif %}
 
-
-
-    {% if not login %}
-    <h1 class="heading">Login</h1>
-<form method="POST">
-    <input type="text" name="name" id="name" placeholder="username" required><br>
-    <input type="password" name="pwd" id="pwd" placeholder="password" required><br>
-    <input type="submit" value="Login" class="btn-login">
-</form>
-
-    {% endif %}
 
  
 
