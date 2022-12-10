@@ -126,7 +126,7 @@ There was an error. Please try again
 
 <!-- modal ending -->
 
-<a class="logout1" href="/text">Cul Bot Text Replier</a>
+<a class="logout1" href="/">Cul Bot Images</a>
 
     <a class="logout" href="/logout">Log Out</a><br>
     <h1 class="heading">Cul Bot Upload Images</h1>
@@ -149,7 +149,7 @@ There was an error. Please try again
 
     <div class="h">
         <span>Keywords</span>
-        <span>Images</span>
+        <span>Text</span>
     </div>
 
     <div class="img-boxs">
@@ -187,26 +187,11 @@ There was an error. Please try again
 
 
 
-
-
-
-        <div class="i-box">
-
-          <a href="#modal-option-3" id="">
-<button onclick="do_stuff('{{name[i]}}')" class="add-box" id="{{name[i]}}">+</button>
-</a>
-        {% for g in imgs[i] %} 
     
-        <div style="position:relative; display:inline;" id="I-{{i}}-{{loop.index}}">
+
+
       
-          <button id="c-{{loop.index}}" class="close AClass" onclick="delete_img('img-{{i}}-{{loop.index}}')">
-             <span>&times;</span>
-          </button>
-          <img src="{{g}}" class="modal-target" id="img-{{i}}-{{loop.index}}" onerror="this.onerror=null; this.src='https://media.discordapp.net/attachments/868218686366949416/1047090569689710643/attachment.png'">
-        </div>
-        
-        {% endfor %}
-    </div>
+
     </div>
     {% endfor %}
 
@@ -270,5 +255,5 @@ There was an error. Please try again
 {% endblock %}
 
 </body>
-<script src="/static/js/main.js" type="text/javascript"></script>
+<script src="/static/js/text.js" type="text/javascript"></script>
 </html>

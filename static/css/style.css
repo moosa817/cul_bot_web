@@ -3,6 +3,9 @@
     color:white;
     margin:0;
 }
+body{
+  overflow-x:hidden;
+}
 
 form{
     text-align: center;
@@ -457,3 +460,15 @@ form input{
   padding:10px;
   color:black;
  }
+ .logout1{
+  float:left;
+  margin:40px;
+  border:1px solid white;
+  padding:10px;
+  text-decoration: none;
+}
+.logout1:hover{
+  color:black;
+  background: white;
+  transition: 0.9s;
+}
