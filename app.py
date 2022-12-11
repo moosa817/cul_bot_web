@@ -6,8 +6,9 @@ from flask_files.admin_edit import log_page
 from flask_files.file_admin import admin_page
 from flask_files.file_txt import txt_page
 from flask_files.txt_edit import edit_txt_name,delete_txt_name,edit_txt_txt
-UPLOAD_FOLDER = 'static/imgs/'
+UPLOAD_FOLDER = '/tmp'
 b = os.getcwd()
+print(os.listdir())
 UPLOAD_FOLDER = os.path.join(b, UPLOAD_FOLDER) 
 # print(UPLOAD_FOLDER)
 ALLOWED_EXTENSIONS = set(['png','jpg', 'jpeg', 'gif','webp','tiff'])
