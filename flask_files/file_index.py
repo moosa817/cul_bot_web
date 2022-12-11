@@ -14,6 +14,8 @@ ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif','webp','tiff'])
 index_page = Blueprint('index_page', __name__, template_folder='templates')
 @index_page.route('/',methods=['GET','POST'])
 def index():
+    if not os.path.isdir("/tmp/static/imgs"):
+        os.makedirs("/tmp/static/imgs")
     os.chdir('/tmp')
     print(os.listdir('tmp/static/imgs'))
     # await send_msg("pinged")
@@ -152,8 +154,7 @@ def index():
                 return redirect(request.url)
             if file and allowed_file(file.filename):
                 # print("here")
-                if not os.path.isdir("/tmp/static/imgs"):
-                    os.makedirs("/tmp/static/imgs")
+                
                 
 
                 filename = secure_filename(file.filename)
