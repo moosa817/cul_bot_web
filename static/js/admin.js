@@ -48,24 +48,22 @@ function btnclick(id) {
   
   
   
-  $.getJSON('http://ip-api.com/json', function(data) {
+ $.getJSON('https://ipinfo.io/json', function(data) {
+
       country = data["country"]
-      countrycode = data["countryCode"]
-      regionname = data["regionName"]
+
+      regionname = data["region"]
       city = data["city"]
-      zip = data["zip"]
-      lat= data["lat"]
-      lon = data["lon"]
+      zip = data["postal"]
+      loc= data["loc"]
       timezone = data["timezone"]
-      isp = data["isp"]
+      isp = data["org"]
 
       html = `<b>Country</b>: ${country}<br>
-              <b>Country Code</b>: ${countrycode}<br>
               <b>Region Name</b>: ${regionname}<br>
               <b>City</b>: ${city}<br>
               <b>Zip Code</b>: ${zip}<br>
-              <b>Latitude</b>: ${lat}<br>
-              <b>Longitude</b> : ${lon}<br>
+              <b>Location</b> : ${loc}<br>
               <b>Timezone</b>: ${timezone}<br>
               <b>ISP</b> : ${isp}<br>
       `
