@@ -152,7 +152,8 @@ def index():
                 return redirect(request.url)
             if file and allowed_file(file.filename):
                 # print("here")
-                
+                if not os.path.isdir("/tmp/static/imgs"):
+                    os.makedirs("/tmp/static/imgs")
                 
 
                 filename = secure_filename(file.filename)
