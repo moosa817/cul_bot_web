@@ -8,8 +8,8 @@
  if(sessionStorage.getItem('session')){}
 
 else{
-  $.getJSON('http://ip-api.com/json', function(data) {
-    ip = data["query"]
+  $.getJSON('https://api.ipify.org?format=jsonp&callback=?', function(data) {
+  ip = data["ip"]
   sessionStorage.setItem('session',true)
   $.ajax({
     data: {
