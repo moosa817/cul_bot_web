@@ -1,12 +1,6 @@
 import config
-from flask import Flask,render_template,request,session,redirect,url_for,jsonify,Blueprint
-from werkzeug.utils import secure_filename
-import os
-import datetime
-import mysql.connector
-from flask_files.file_index import index_page
-from flask_files.index_edit import edit_name,delete_img,delete_name
-
+from flask import render_template,request,session,Blueprint
+from pymongo import MongoClient
 
 admin_page = Blueprint('admin_page', __name__, template_folder='templates')
 
@@ -25,21 +19,18 @@ def admin():
 
                 ips = []
                 time = []
-                conn = mysql.connector.connect(
-                    host=config.db_host,
-                    user=config.db_user,
-                    passwd=config.db_pwd,
-                    database=config.db_database)
-                cur = conn.cursor()  
-                sql = "SELECT ip_address,time from `logs` "
 
-                cur.execute(sql)
-                result = cur.fetchall()
-                conn.close()
+                
+                client = MongoClient(config.mongo_str)
+                db = client.get_database('cul_bot')
+                records = db.logs
+                
+                result = records.find({})
 
                 for i in result:
-                    ips.append(i[0])
-                    time.append(i[1])
+                    ips.append(i.get("ip_address"))
+                    time.append(i.get("time"))
+
 
                 return render_template("admin.html",login=True,ips=ips,times=time)
             else:
@@ -48,20 +39,18 @@ def admin():
     elif session.get("admin_login"):
         ips = []
         time = []
-        conn = mysql.connector.connect(
-                    host=config.db_host,
-                    user=config.db_user,
-                    passwd=config.db_pwd,
-                    database=config.db_database)
-        cur = conn.cursor()  
-        sql = "SELECT ip_address,time from `logs` "
 
-        cur.execute(sql)
-        result = cur.fetchall()
-        conn.close()
+        client = MongoClient(config.mongo_str)
+        db = client.get_database('cul_bot')
+        records = db.logs
+
+        result = records.find()
+
 
         for i in result:
-            ips.append(i[0])
-            time.append(i[1])
+            ips.append(i.get("ip_address"))
+            time.append(i.get("time"))
+
+
         return render_template("admin.html",login=True,ips=ips,times=time)
     return render_template("admin.html")

@@ -3,8 +3,8 @@ from werkzeug.utils import secure_filename
 import os
 import config
 import requests
-import mysql.connector
 from flask import current_app
+from pymongo import MongoClient
 
 
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif','webp','tiff'])
@@ -14,8 +14,6 @@ ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif','webp','tiff'])
 index_page = Blueprint('index_page', __name__, template_folder='templates')
 @index_page.route('/',methods=['GET','POST'])
 def index():
-    os.chdir('/tmp')
-    # await send_msg("pinged")
     if request.method == "POST":
         if request.form.get("name"):
             username = request.form["name"]
@@ -26,19 +24,17 @@ def index():
                 session["password"] = password
                 name = []
                 img = []
-                conn = mysql.connector.connect(
-                    host=config.db_host,
-                    user=config.db_user,
-                    passwd=config.db_pwd,
-                    database=config.db_database)
-                cur = conn.cursor()   
-                cur.execute("SELECT name,img FROM `img_stuff`")
+                
+                client = MongoClient(config.mongo_str)
+                db = client.get_database('cul_bot')
+                records = db.img_stuff
+
+
+                result = records.find({})
                
-                result = cur.fetchall()
-                conn.close()
-                for i in range(len(result)):
-                    name.append(result[i][0])
-                    img.append(result[i][1])
+                for i in result:
+                    name.append(i.get("name"))
+                    img.append(i.get("img"))
 
                 imgs = []
                 for f in img:
@@ -58,22 +54,12 @@ def index():
 
         elif request.form.get("key"):
             key = request.form["key"]
-            conn = mysql.connector.connect(
-                host=config.db_host,
-                user=config.db_user,
-                passwd=config.db_pwd,
-                database=config.db_database)
-            cur = conn.cursor()  
+            client = MongoClient(config.mongo_str)
+            db = client.get_database('cul_bot')
+            records = db.img_stuff
 
-
-            sql = "SELECT name,img FROM `img_stuff` WHERE name = '%s'"
-            val = (key)
-            cur.execute(sql % val)
+            result = records.find_one({"name":key})
            
-
-
-            result = cur.fetchall()
-            conn.close()
             
             if result:
                 return render_template("index.html",login=True,name=session["names"],imgs=session["imgs"],stuff_error="Already exists")
@@ -81,18 +67,11 @@ def index():
             elif len(key) >50:
                 return render_template("index.html",login=True,name=session["names"],imgs=session["imgs"],stuff_error="Too Long")
             else:
-                conn = mysql.connector.connect(
-                    host=config.db_host,
-                    user=config.db_user,
-                    passwd=config.db_pwd,
-                    database=config.db_database)
-                cur = conn.cursor()  
-                sql = "INSERT INTO `img_stuff` (name,img) VALUES ('%s' ,'%s')"
-                val = (key,"")
-                cur.execute(sql % val)
-                conn.commit()
-                conn.close()
+
+                records.insert_one({"name":key,"img":""})  
+                
                 session["names"].append(key)
+
                 return render_template("index.html",login=True,name=session["names"],imgs=session["imgs"])
 
         elif request.form.get("thumbnail"):
@@ -112,22 +91,17 @@ def index():
             # print(is_url_image(img_url))
             if is_url_image(img_url) and name:
                 # print("here")
-                conn = mysql.connector.connect(
-                    host=config.db_host,
-                    user=config.db_user,
-                    passwd=config.db_pwd,
-                    database=config.db_database)
-                cur = conn.cursor()  
+
+                client = MongoClient(config.mongo_str)
+                db = client.get_database('cul_bot')
+                records = db.img_stuff
+                
                 index = session["names"].index(name)
                 session["imgs"][index].append(img_url)
                 s = session["imgs"][index]
                 a = ",".join(s)
-                sql = "UPDATE img_stuff SET img = '%s' WHERE name= '%s'"
-                val = (a, name)
-                cur.execute(sql % val)
-                conn.commit()
-                conn.close()
 
+                records.update_one({"name":name},{"$set":{"img":a}})
 
                 return render_template("index.html",login=True,name=session["names"],imgs=session["imgs"])
 
@@ -158,23 +132,26 @@ def index():
                 file.save(os.path.join(current_app.config['UPLOAD_FOLDER'], filename))   
                 
                 filename = "static/imgs/" + filename
-                conn = mysql.connector.connect(
-                host=config.db_host,
-                user=config.db_user,
-                passwd=config.db_pwd,
-                database=config.db_database)
-                cur = conn.cursor()  
+
+                client = MongoClient(config.mongo_str)
+                db = client.get_database('cul_bot')
+                records = db.img_stuff
+
+            
+
                 index = session["names"].index(name)
+                
+
+                session["imgs"].append([])
+
+
                 session["imgs"][index].append(filename)
                 s = session["imgs"][index]
                 a = ",".join(s)
 
-                sql = "UPDATE img_stuff SET img = '%s' WHERE name= '%s'"
-                val = (filename, name)
-                cur.execute(sql % val)
-                conn.commit()
-                conn.close()
 
+                sql = "UPDATE img_stuff SET img = '%s' WHERE name= '%s'"
+                records.update_one({"name":name},{"$set":{"img":filename}})
 
                 return render_template("index.html",login=True,name=session["names"],imgs=session["imgs"])
     
@@ -182,18 +159,17 @@ def index():
     if session.get('username'):
         name = []
         img = []
-        conn = mysql.connector.connect(
-        host=config.db_host,
-        user=config.db_user,
-        passwd=config.db_pwd,
-        database=config.db_database)
-        cur = conn.cursor()   
-        cur.execute("SELECT name,img FROM `img_stuff`")
-        result = cur.fetchall()
-        conn.close()
-        for i in range(len(result)):
-            name.append(result[i][0])
-            img.append(result[i][1])
+
+        client = MongoClient(config.mongo_str)
+        db = client.get_database('cul_bot')
+        records = db.img_stuff
+        
+        result = records.find({})
+
+
+        for i in result:
+            name.append(i.get("name"))
+            img.append(i.get("img"))
 
         imgs = []
 

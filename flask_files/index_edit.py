@@ -1,6 +1,6 @@
 from flask import Blueprint,request,session,jsonify
 import config
-import mysql.connector
+from pymongo import MongoClient
 
 edit_name = Blueprint('edit_name', __name__, template_folder='templates')
 
@@ -25,19 +25,11 @@ def edit_nam():
 
 
         # add new input to database replacing it with original input
-        conn = mysql.connector.connect(
-        host=config.db_host,
-        user=config.db_user,
-        passwd=config.db_pwd,
-        database=config.db_database)
-        cur = conn.cursor()
+        client = MongoClient(config.mongo_str)
+        db = client.get_database('cul_bot')
+        records = db.img_stuff
+        records.update_one({"name":original_input},{"$set":{"nae":new_input}})
 
-        sql = "UPDATE img_stuff SET name = '%s' WHERE name= '%s'"
-        val = (new_input, original_input)
-        cur.execute(sql % val)
-
-        conn.commit()
-        conn.close()
         return jsonify({"success":"renamed successfully"})
 
 
@@ -47,17 +39,13 @@ def del_name():
         delete_input = request.form["delete_input"]
         try:
             session["names"].remove(delete_input)
-            conn = mysql.connector.connect(
-                host=config.db_host,
-                user=config.db_user,
-                passwd=config.db_pwd,
-                database=config.db_database)
-            cur = conn.cursor()
-            sql = "DELETE FROM img_stuff WHERE name = '%s'"
-            val = (delete_input)
-            cur.execute(sql % val)
-            conn.commit()
-            conn.close()
+
+            client = MongoClient(config.mongo_str)
+            db = client.get_database('cul_bot')
+            records = db.img_stuff
+            
+            records.delete_one({"name":delete_input})
+
             return jsonify({"success":True})
         except:
             return jsonify({"success": False})
@@ -85,19 +73,11 @@ def del_img():
             img_copy = list(filter(None, img_row))
             a = ",".join(img_copy)
             # print(a)
-            conn = mysql.connector.connect(
-                host=config.db_host,
-                user=config.db_user,
-                passwd=config.db_pwd,
-                database=config.db_database)
-            cur = conn.cursor()
-            sql = "UPDATE img_stuff SET img = '%s' WHERE name = '%s'"
-            val = (a,name)
-            cur.execute(sql % val)
-            # result = cur.fetchall()
-            # print(result)
-            conn.commit()
-            conn.close()
+            client = MongoClient(config.mongo_str)
+            db = client.get_database('cul_bot')
+            records = db.img_stuff
+                
+            records.update_one({"name":name},{"$set":{"img":a}})
 
 
             return jsonify({"success":True})

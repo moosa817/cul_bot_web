@@ -1,6 +1,6 @@
 from flask import Blueprint,request,session,jsonify
 import config
-import mysql.connector
+from pymongo import MongoClient
 
 edit_txt_name = Blueprint('edit_txt_name', __name__, template_folder='templates')
 
@@ -24,22 +24,12 @@ def edit_txt_nam():
         index = session["txt_name"].index(original_input)
         session["txt_name"][index] = new_input
 
+        client = MongoClient(config.mongo_str)
+        db = client.get_database('cul_bot')
+        records = db.text_stuff
+        
+        records.update_one({"name":original_input},{"$set":{"name":new_input}})
 
-
-        # add new input to database replacing it with original input
-        conn = mysql.connector.connect(
-        host=config.db_host,
-        user=config.db_user,
-        passwd=config.db_pwd,
-        database=config.db_database)
-        cur = conn.cursor()
-
-        sql = "UPDATE text_stuff SET name = '%s' WHERE name= '%s'"
-        val = (new_input, original_input)
-        cur.execute(sql % val)
-
-        conn.commit()
-        conn.close()
         return jsonify({"success":"renamed successfully"})
 
 
@@ -49,18 +39,13 @@ def del_name():
         delete_txt_input = request.form["delete_input"]
         try:
             session["txt_name"].remove(delete_txt_input)
-            
-            conn = mysql.connector.connect(
-                host=config.db_host,
-                user=config.db_user,
-                passwd=config.db_pwd,
-                database=config.db_database)
-            cur = conn.cursor()
-            sql = "DELETE FROM text_stuff WHERE name = '%s'"
-            val = (delete_txt_input)
-            cur.execute(sql % val)
-            conn.commit()
-            conn.close()
+
+                
+            client = MongoClient(config.mongo_str)
+            db = client.get_database('cul_bot')
+            records = db.text_stuff            
+
+            records.delete_one({"name":delete_txt_input})
             return jsonify({"success":True})
         except:
             return jsonify({"success": False})
@@ -76,22 +61,13 @@ def edit_txt():
         original_input = input2
         index = session["txt_text"].index(original_input)
         session["txt_text"][index] = new_input
+        name = session["txt_name"][index]
+        
+        client = MongoClient(config.mongo_str)
+        db = client.get_database('cul_bot')
+        records = db.text_stuff
 
 
+        records.update_one({"name":name,"text":original_input},{"$set":{"text":new_input}})
 
-        # add new input to database replacing it with original input
-        conn = mysql.connector.connect(
-        host=config.db_host,
-        user=config.db_user,
-        passwd=config.db_pwd,
-        database=config.db_database)
-        cur = conn.cursor()
-
-        # print("here editing",input1,input2)
-        sql = "UPDATE text_stuff SET text = '%s' WHERE text= '%s'"
-        val = (new_input, original_input)
-        cur.execute(sql % val)
-
-        conn.commit()
-        conn.close()
         return jsonify({"success":"renamed successfully"})
